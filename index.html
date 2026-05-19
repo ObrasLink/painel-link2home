@@ -1238,7 +1238,8 @@ function closeModal(){document.getElementById('overlay').classList.remove('open'
 function saveUrl(){sheetsUrl=document.getElementById('url-in').value.trim();localStorage.setItem('l2h_url',sheetsUrl);closeModal();fetchData();startCD();}
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 
-loadDemo();startCD();
+if(sheetsUrl){fetchData();}else{loadDemo();}
+startCD();
 </script>
 </body>
 </html>
