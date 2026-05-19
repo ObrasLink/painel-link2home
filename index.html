@@ -1213,9 +1213,12 @@ let data=[]; let cdVal=60; let cdTimer=null;
 async function fetchData(){
   if(!sheetsUrl){loadDemo();return;}
   try{
-    const res=await fetch(sheetsUrl+'&_='+Date.now());
+    const sep=sheetsUrl.includes('?')?'&':'?';
+    const res=await fetch(sheetsUrl+sep+'_='+Date.now(), {cache:'no-store'});
     if(!res.ok)throw new Error('HTTP '+res.status);
-    data=parseCSV(await res.text());
+    const txt=await res.text();
+    if(!txt.trim()){throw new Error('CSV vazio');}
+    data=parseCSV(txt);
     render(data);
     document.getElementById('err').style.display='none';
   }catch(e){
