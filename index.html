@@ -160,8 +160,8 @@
     <div style="border-top:1px solid var(--gray-light);padding-top:14px;display:flex;flex-direction:column;gap:10px;">
       <p><b style="color:var(--dark)">Colunas (linha 1 = cabeçalho):</b></p>
       <div class="code">empreendimento | unidade | atividade | status | data_prevista</div>
-      <p>Status: <b style="color:var(--blue-dark)">concluido</b> (etapa finalizada) ou <b style="color:var(--blue-dark)">vazio</b> (pendente)</p>
-      <p>O painel mostra automaticamente a 1ª etapa pendente e a próxima</p>
+      <p>Status: <b style="color:var(--blue-dark)">atual</b> (em execução) · <b style="color:var(--blue-dark)">concluido</b> (feita) · <b style="color:var(--blue-dark)">vazio</b> (pendente)</p>
+      <p>O card mostra a etapa marcada <b style="color:var(--blue-dark)">atual</b> e a próxima pendente com data</p>
     </div>
     <button class="btn-s" onclick="loadDemo();closeModal();" style="width:100%">↩ Carregar demonstração</button>
   </div>
@@ -1140,10 +1140,10 @@ function getResponsavel(act) {
 }
 
 function analyzeUnit(acts){
-  // Etapa atual = primeira que NÃO está concluída
-  const cur=acts.find(a=>a.status!=='concluido');
+  // Etapa atual = a marcada como "atual" na planilha
+  const cur=acts.find(a=>a.status==='atual');
   const curIdx=cur?acts.indexOf(cur):-1;
-  // Próxima = a seguinte não-concluída
+  // Próxima = primeira pendente (vazia) depois da atual
   let next=null;
   if(curIdx>=0){
     for(let i=curIdx+1;i<acts.length;i++){
