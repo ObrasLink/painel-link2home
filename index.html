@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel — Link2home</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:       #0AAEDB;
+    --blue-dark:  #0890b8;
+    --blue-light: #e8f7fc;
+    --blue-mid:   #b3e8f5;
+    --bg:         #edf1f4;
+    --white:      #ffffff;
+    --dark:       #18212e;
+    --gray:       #8a95a3;
+    --gray-light: #d8e2e8;
+    --font:       'Nunito', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: var(--font); color: var(--dark); min-height: 100vh; }
+
+  header {
+    background: var(--white);
+    border-bottom: 3px solid var(--blue);
+    height: 64px; padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 10px rgba(10,174,219,0.07);
+  }
+  .logo-area { display: flex; align-items: center; gap: 14px; }
+  .logo-img  { height: 36px; width: auto; }
+  .vline     { width: 1.5px; height: 26px; background: var(--gray-light); }
+  .panel-sub { font-size: 13px; font-weight: 800; color: var(--gray); }
+  .hdr-right { display: flex; align-items: center; gap: 16px; }
+  .live-pill {
+    display: flex; align-items: center; gap: 7px;
+    background: var(--blue-light); border: 1.5px solid var(--blue-mid);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 11px; font-weight: 800; color: var(--blue-dark);
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+  .cd-txt { font-size: 12px; font-weight: 700; color: var(--gray); }
+  .cd-txt b { color: var(--blue); }
+  .btn-cfg {
+    background: var(--white); border: 1.5px solid var(--gray-light);
+    color: var(--gray); font-family: var(--font); font-size: 11px; font-weight: 800;
+    padding: 6px 14px; border-radius: 9px; cursor: pointer; transition: .15s;
+  }
+  .btn-cfg:hover { border-color: var(--blue); color: var(--blue); }
+
+  .main { padding: 28px 40px; display: flex; flex-direction: column; gap: 36px; }
+
+  .emp-group { display: flex; flex-direction: column; gap: 14px; }
+  .emp-hdr { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-light); }
+  .emp-name { font-size: 16px; font-weight: 900; color: var(--dark); }
+  .emp-tag  { font-size: 10px; font-weight: 800; color: var(--gray); background: var(--gray-light); padding: 2px 9px; border-radius: 10px; }
+  .cards-row { display: flex; flex-wrap: wrap; gap: 14px; }
+
+  /* TAG */
+  .card-tag {
+    font-size: 9px; font-weight: 900; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 9px; border-radius: 6px; flex-shrink: 0;
+  }
+  .tag-obra   { background: var(--blue-light); color: var(--blue-dark); border: 1px solid var(--blue-mid); }
+  .tag-pronto { background: #eafaf4; color: #17b978; border: 1px solid rgba(23,185,120,.3); }
+
+  /* CARD EM OBRA */
+  .card-obra {
+    background: var(--white); border-radius: 16px; border: 1.5px solid var(--gray-light);
+    width: 280px; padding: 18px 20px 20px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .obra-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .obra-num { font-size: 28px; font-weight: 900; color: var(--blue); line-height: 1; letter-spacing: -1px; }
+  .obra-status { font-size: 26px; font-weight: 900; color: var(--dark); line-height: 1.15; margin-bottom: 16px; }
+  .obra-divider { width: 100%; height: 1px; background: var(--gray-light); margin-bottom: 10px; }
+  .obra-next-meta { font-size: 10px; font-weight: 700; color: var(--gray); margin-bottom: 3px; }
+  .obra-next-value { font-size: 15px; font-weight: 900; color: var(--dark); line-height: 1.2; }
+  .obra-next-empty { font-size: 13px; font-weight: 700; color: var(--gray-light); }
+  .obra-next-bottom { display: flex; flex-direction: column; gap: 5px; }
+  .obra-next-resp {
+    font-size: 11px; font-weight: 800;
+    color: var(--blue-dark);
+    background: var(--blue-light);
+    border: 1px solid var(--blue-mid);
+    border-radius: 6px;
+    padding: 2px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+  }
+
+  /* CARD PRONTO */
+  .card-pronto {
+    background: var(--white); border-radius: 16px; border: 1.5px solid var(--gray-light);
+    width: 260px; padding: 18px 20px 20px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    min-height: 140px;
+  }
+  .pronto-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .pronto-num { font-size: 28px; font-weight: 900; color: var(--blue); line-height: 1; letter-spacing: -1px; }
+  .pronto-status-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 6px 0; }
+  .pronto-status { font-size: 26px; font-weight: 900; color: var(--dark); text-align: center; line-height: 1.2; }
+
+  /* ERROR */
+  .err-bar {
+    margin: 10px 40px 0; background: #fef2f2; border: 1.5px solid rgba(239,68,68,.3);
+    border-radius: 10px; padding: 9px 16px; font-size: 12px; font-weight: 700; color: #ef4444; display: none;
+  }
+
+  /* MODAL */
+  .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:200; align-items:center; justify-content:center; }
+  .overlay.open { display:flex; }
+  .modal { background:var(--white); border-radius:20px; padding:32px; width:540px; max-height:85vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 60px rgba(0,0,0,.15); }
+  .modal h2 { font-size:19px; font-weight:900; color:var(--blue); }
+  .modal p  { font-size:12px; color:var(--gray); line-height:1.6; }
+  .modal input { width:100%; background:var(--bg); border:1.5px solid var(--gray-light); border-radius:10px; color:var(--dark); font-family:var(--font); font-size:13px; font-weight:700; padding:11px 14px; }
+  .modal input:focus { outline:none; border-color:var(--blue); }
+  .modal-row { display:flex; gap:10px; justify-content:flex-end; }
+  .btn-p { background:var(--blue); color:#fff; font-family:var(--font); font-weight:900; font-size:13px; padding:10px 22px; border:none; border-radius:10px; cursor:pointer; }
+  .btn-s { background:transparent; color:var(--gray); font-family:var(--font); font-weight:800; font-size:13px; padding:10px 20px; border:1.5px solid var(--gray-light); border-radius:10px; cursor:pointer; }
+  .code { background:var(--bg); border:1.5px solid var(--gray-light); border-radius:9px; padding:11px 13px; font-size:10px; font-family:monospace; font-weight:700; color:var(--blue-dark); word-break:break-all; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <img src="data:image/png;base64,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" alt="Link2home" style="height:42px;width:auto;">
+    <div class="vline"></div>
+    <span class="panel-sub">Painel de Obras</span>
+  </div>
+  <div class="hdr-right">
+    <span class="cd-txt">atualiza em <b id="cd">60</b>s</span>
+    <div class="live-pill"><div class="dot"></div><span id="upd">ao vivo</span></div>
+    <button class="btn-cfg" onclick="openModal()">⚙ Google Sheets</button>
+  </div>
+</header>
+
+<div class="err-bar" id="err"></div>
+<div class="main" id="main"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>Conectar Google Sheets</h2>
+    <p>Publique sua planilha como CSV e cole a URL abaixo. O painel atualiza a cada 60 segundos.</p>
+    <div class="code">https://docs.google.com/spreadsheets/d/<b>ID</b>/export?format=csv&gid=0</div>
+    <p><b style="color:var(--dark)">Como publicar:</b> Arquivo → Compartilhar → Publicar na web → CSV → Publicar</p>
+    <input type="text" id="url-in" placeholder="Cole a URL aqui...">
+    <div class="modal-row">
+      <button class="btn-s" onclick="closeModal()">Cancelar</button>
+      <button class="btn-p" onclick="saveUrl()">Salvar</button>
+    </div>
+    <div style="border-top:1px solid var(--gray-light);padding-top:14px;display:flex;flex-direction:column;gap:10px;">
+      <p><b style="color:var(--dark)">Colunas (linha 1 = cabeçalho):</b></p>
+      <div class="code">empreendimento | unidade | atividade | status | data_prevista</div>
+      <p>Status: <b style="color:var(--blue-dark)">atual</b> (em execução) · <b style="color:var(--blue-dark)">concluido</b> (feita) · <b style="color:var(--blue-dark)">vazio</b> (pendente)</p>
+      <p>O card mostra a etapa marcada <b style="color:var(--blue-dark)">atual</b> e a próxima pendente com data</p>
+    </div>
+    <button class="btn-s" onclick="loadDemo();closeModal();" style="width:100%">↩ Carregar demonstração</button>
+  </div>
+</div>
+
+<script>
+const RESPONSAVEL = {
+  'assinatura de contrato de reforma com o investidor': 'Fellipe',
+  'assinatura de contrato': 'Fellipe',
+  'procuracoes assinadas': 'Nathália',
+  'retirada de chaves': 'Nathália',
+  'ligacao de energia': 'Nathália',
+  'aprovacao do projeto de reforma no condominio': 'Marcelo',
+  'aprovacao projeto condominio': 'Marcelo',
+  'execucao de obras': 'Marcelo',
+  'limpeza bruta': 'Marcelo e Henry',
+  'vistoria de obra': 'Marcelo e Juliana',
+  'atendimento de pendencias de obra': 'Marcelo',
+  'atend. pendencias obra': 'Marcelo',
+  'vistoria final / entrega': 'Marcelo e Juliana',
+  'vistoria final/entrega': 'Marcelo e Juliana',
+  'compra de enxoval/utilidades/consumo': 'Nilvando',
+  'compra de enxoval': 'Nilvando',
+  'envio de enxoval/utilidades/consumo': 'Nilvando',
+  'envio de enxoval': 'Nilvando',
+  'recebimento de enxoval/utilidades/consumo': 'Nilvando',
+  'recebimento enxoval': 'Nilvando',
+  'montagem de enxoval/utilidades': 'Henry',
+  'montagem enxoval': 'Henry',
+  'checklist de enxoval/utilidades': 'Nilvando',
+  'checklist enxoval': 'Nilvando',
+  'limpeza fina': 'Henry',
+  'fotografia profissional': 'Fotógrafo externo',
+  'curadoria de liberacao para locacao': 'Juliana',
+  'curadoria para locacao': 'Juliana',
+  'inventario': 'Nilvando',
+  'inventário': 'Nilvando',
+  'liberacao para locacao': 'Nilvando',
+};
+
+const NOME_CURTO = {
+  'assinatura de contrato de reforma com o investidor':'Assinatura de contrato',
+  'assinatura de contrato':'Assinatura de contrato',
+  'procuracoes assinadas':'Procurações',
+  'retirada de chaves':'Retirada de chaves',
+  'ligacao de energia':'Energia',
+  'aprovacao do projeto de reforma no condominio':'Aprovação no condomínio',
+  'aprovacao projeto condominio':'Aprovação no condomínio',
+  'execucao de obras':'Em obras',
+  'limpeza bruta':'Limpeza bruta',
+  'vistoria de obra':'Vistoria de obra',
+  'atendimento de pendencias de obra':'Pendências de obra',
+  'atend. pendencias obra':'Pendências de obra',
+  'vistoria final / entrega':'Vistoria final',
+  'vistoria final/entrega':'Vistoria final',
+  'compra de enxoval/utilidades/consumo':'Compra de equip. e consumíveis',
+  'compra de enxoval':'Compra de equip. e consumíveis',
+  'envio de enxoval/utilidades/consumo':'Envio para a unidade',
+  'envio de enxoval':'Envio para a unidade',
+  'recebimento de enxoval/utilidades/consumo':'Recebimento na unidade',
+  'recebimento enxoval':'Recebimento na unidade',
+  'montagem de enxoval/utilidades':'Montagem e instalação',
+  'montagem enxoval':'Montagem e instalação',
+  'checklist de enxoval/utilidades':'Checklist de entrega',
+  'checklist enxoval':'Checklist de entrega',
+  'limpeza fina':'Limpeza fina',
+  'fotografia profissional':'Fotografia',
+  'curadoria de liberacao para locacao':'Curadoria',
+  'curadoria para locacao':'Curadoria',
+  'liberacao para locacao':'Liberada p/ locação',
+  'inventario':'Inventário',
+  'inventário':'Inventário',
+};
+
+// apenas unidades em obra
+
+
+
+const DEMO = [
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Pinheiros",unit:"1306",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"1508",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Nex One Vila Nova",unit:"2220",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"603",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1204",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1206",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1304",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1404",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1504",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1604",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"806",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1005",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1104",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1107",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1306",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1506",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1508",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1607",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1608",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Villa Perdizes",unit:"1704",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"310",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"311",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"410",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"411",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"508",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"511",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"608",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"711",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"808",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1211",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1311",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"1610",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"211",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"111",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"110",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"210",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"My One Campo Belo",unit:"208",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"85",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"68",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"75",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"86",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"88",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"89",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Assinatura de contrato de reforma com o investidor",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Procura\u00e7\u00f5es assinadas",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Retirada de chaves",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Liga\u00e7\u00e3o de energia",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Aprova\u00e7\u00e3o do projeto de reforma no condom\u00ednio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Execu\u00e7\u00e3o de Obras",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Limpeza Bruta",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Vistoria de Obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Atendimento de pend\u00eancias de obra",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Vistoria final / Entrega",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Compra de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Envio de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Recebimento de enxoval/utilidades/consumo",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Montagem de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Checklist de enxoval/utilidades",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Limpeza fina",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Fotografia profissional",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Curadoria de libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Invent\u00e1rio",status:'nao_iniciado',prev:''},
+  {emp:"Do It Vila Ol\u00edmpia",unit:"69",act:"Libera\u00e7\u00e3o para loca\u00e7\u00e3o",status:'nao_iniciado',prev:''},
+];
+
+function norm(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+
+function nomeCurto(act){
+  const k=norm(act);
+  for(const key in NOME_CURTO){ if(k===norm(key)||k.includes(norm(key))) return NOME_CURTO[key]; }
+  return act;
+}
+
+function getResponsavel(act) {
+  const k = norm(act);
+  for (const key in RESPONSAVEL) {
+    if (k === norm(key) || k.includes(norm(key))) return RESPONSAVEL[key];
+  }
+  return null;
+}
+
+function analyzeUnit(acts){
+  // Etapa atual = a marcada como "atual" na planilha
+  const cur=acts.find(a=>a.status==='atual');
+  const curIdx=cur?acts.indexOf(cur):-1;
+  // Próxima = primeira pendente (vazia) depois da atual
+  let next=null;
+  if(curIdx>=0){
+    for(let i=curIdx+1;i<acts.length;i++){
+      if(acts[i].status!=='concluido'){next=acts[i];break;}
+    }
+  }
+  const nextResp = next ? getResponsavel(next.act) : null;
+  return {currentAct:cur?cur.act:null, nextAct:next?next.act:null, nextPrev:next?next.prev:null, nextResp};
+}
+
+function render(rows){
+  const c=document.getElementById('main');
+  if(!rows||!rows.length){c.innerHTML='<div style="text-align:center;padding:80px;color:var(--gray);font-weight:700">Sem dados.</div>';return;}
+  const empMap={};
+  rows.forEach(r=>{if(!empMap[r.emp])empMap[r.emp]={};if(!empMap[r.emp][r.unit])empMap[r.emp][r.unit]=[];empMap[r.emp][r.unit].push(r);});
+  let html='';
+  for(const emp in empMap){
+    const units=empMap[emp]; const uc=Object.keys(units).length;
+    html+=`<div class="emp-group"><div class="emp-hdr"><span class="emp-name">${emp}</span><span class="emp-tag">${uc} unidade${uc>1?'s':''}</span></div><div class="cards-row">`;
+    for(const unit in units){
+      const info=analyzeUnit(units[unit]);
+      const st=info.currentAct?nomeCurto(info.currentAct):'—';
+      const nx=info.nextAct?nomeCurto(info.nextAct):null;
+      const nd=info.nextPrev||null;
+      const nr=info.nextResp||null;
+      html+=`<div class="card-obra">
+        <div class="obra-top"><div class="obra-num">${unit}</div><div class="card-tag tag-obra">Em obra</div></div>
+        <div class="obra-status">${st}</div>
+        <div class="obra-divider"></div>
+        ${nx
+          ? `<div class="obra-next-meta">Próxima etapa${nd ? ` · prevista ${nd}` : ''}</div>
+             <div class="obra-next-bottom">
+               <div class="obra-next-value">${nx}</div>
+               ${nr ? `<div class="obra-next-resp">👤 ${nr}</div>` : ''}
+             </div>`
+          : `<div class="obra-next-empty">—</div>`}
+      </div>`;
+    }
+    html+=`</div></div>`;
+  }
+  c.innerHTML=html;
+  document.getElementById('upd').textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function splitCSVLine(line){
+  const cols=[];let cur='';let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){inQ=!inQ;}
+    else if(ch===','&&!inQ){cols.push(cur.trim().replace(/^"|"$/g,''));cur='';}
+    else{cur+=ch;}
+  }
+  cols.push(cur.trim().replace(/^"|"$/g,''));
+  return cols;
+}
+
+function parseCSV(txt){
+  return txt.trim().split('\n').slice(1).map(l=>{
+    const c=splitCSVLine(l);
+    return{emp:c[0]||'',unit:c[1]||'',act:c[2]||'',status:(c[3]||'').toLowerCase().replace(/\s+/g,'_'),prev:c[4]||''};
+  }).filter(r=>r.emp&&r.unit&&r.act);
+}
+
+let sheetsUrl=localStorage.getItem('l2h_url')||'';
+let data=[]; let cdVal=60; let cdTimer=null;
+
+async function fetchData(){
+  if(!sheetsUrl){loadDemo();return;}
+  try{
+    const sep=sheetsUrl.includes('?')?'&':'?';
+    const url=sheetsUrl+sep+'cachebust='+Date.now();
+    const res=await fetch(url,{cache:'no-store',mode:'cors'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const txt=await res.text();
+    if(!txt.trim()){throw new Error('CSV vazio');}
+    const parsed=parseCSV(txt);
+    if(parsed.length===0){throw new Error('Nenhum dado encontrado no CSV');}
+    data=parsed;
+    render(data);
+    document.getElementById('err').style.display='none';
+  }catch(e){
+    console.warn('fetchData erro:',e.message);
+    document.getElementById('err').textContent='Erro ao atualizar: '+e.message+' — mostrando últimos dados';
+    document.getElementById('err').style.display='block';
+    if(data.length)render(data);
+  }
+}
+
+function loadDemo(){data=DEMO;render(data);document.getElementById('err').style.display='none';}
+
+function startCD(){
+  if(cdTimer)clearInterval(cdTimer);
+  cdVal=60;document.getElementById('cd').textContent=cdVal;
+  cdTimer=setInterval(()=>{cdVal--;document.getElementById('cd').textContent=cdVal;if(cdVal<=0){cdVal=60;fetchData();}},1000);
+}
+
+function openModal(){document.getElementById('overlay').classList.add('open');document.getElementById('url-in').value=sheetsUrl;}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+function saveUrl(){sheetsUrl=document.getElementById('url-in').value.trim();localStorage.setItem('l2h_url',sheetsUrl);closeModal();fetchData();startCD();}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+
+if(sheetsUrl){
+  fetchData().catch(()=>{if(!data.length)loadDemo();});
+}else{loadDemo();}
+startCD();
+</script>
+</body>
+</html>
